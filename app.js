@@ -10,7 +10,6 @@ const blogRoutes = require("./routes/blogRoutes");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoute");
 const { verifyToken, checkUser } = require("./middleware/authMiddleware");
-const errorHandler = require("./middleware/errorHandlerMiddleware");
 const { unless } = require("./helperFunctions");
 
 // express app
@@ -49,10 +48,16 @@ app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
 
 // blog routes
-// app.use(blogRoutes);
 app.use("/blogs", blogRoutes);
 
-app.use(errorHandler);
+app.use((error, req, res, next) => {
+  console.log("Error Handler: ", error.message, error);
+  if (error.message) {
+    return res.render("404.ejs", { title: "404", message: error.message });
+  }
+
+  next();
+})
 
 // 404 page
 app.use((req, res) => {
