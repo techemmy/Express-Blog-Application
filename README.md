@@ -1,9 +1,15 @@
-# Blog-Web-Application
-It is built with NodeJS, ExpressJS, and MongoDB as database
+# Express-Blog-Application
+This is an improvement from the [initial express app](https://github.com/techemmy/Blog-Web-Application) I built.
 
-<img width="759" alt="project-express-blogapp" src="https://user-images.githubusercontent.com/43725109/190285595-194682bc-04e7-4a36-a78f-1212d4e957d0.png">
+It is still in progress but these are the imminent changes
+- Convert project architecture to MVC  ✅
+- Transform synchronous operations to asynchronous operations
+- Ensure efficient code operations
+- Proper error handling
+- Test the app functions
+- Documenting the code
+
 
 To start the app, make sure the database URL is set in a .env file and run
 
 `node app`
-# Express-Blog-Application
