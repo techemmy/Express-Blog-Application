@@ -33,7 +33,7 @@ const user_profile_get = async (req, res, next) => {
     }
   } catch (error) {
     res.statusCode = 400;
-    error.message = "An error occured. Please, contact the admin!";
+    error.message = "Invalid user!";
     next(error);
   }
 };
@@ -42,67 +42,51 @@ const edit_profile_get = (req, res) => {
   res.render("./user/edit-profile", { title: "Edit Profile" });
 };
 
-// FIXME: Make operations asynchronous
-const edit_profile_post = (req, res, next) => {
-  const { username, oldPassword, newPassword } = req.body;
-  console.log("Req: ", req.body);
+const edit_profile_post = async (req, res, next) => {
+  try {
+    const feedbackMessages = [];
+    const { username, oldPassword, newPassword } = req.body;
 
-  if (!username && !oldPassword && !newPassword) {
-    return res.redirect(req.originalUrl);
-  }
+    if (!username && !oldPassword && !newPassword) {
+      return res.redirect(req.originalUrl);
+    }
 
-  if (
-    (oldPassword && !newPassword) || // if old password field is field and new password field is not OR
-    (oldPassword && newPassword && oldPassword == newPassword) // the fields are filled but they are the same
-  ) {
-    return renderFeedbackMessage(
-      res,
-      "./user/edit-profile",
-      "Edit Profile",
-      ["Check your passwords input and try again!"],
-      res.locals.user,
-      "danger"
-    );
-  }
-
-  if (username && username != res.locals.username) {
-    User.findByIdAndUpdate(res.locals.user._id, { username })
-      .then(() => {
-        return res.redirect(req.originalUrl);
-      })
-      .catch((err) => next(err));
-  }
-
-  if (oldPassword && newPassword && !(oldPassword == newPassword)) {
-    bcrypt
-      .compare(oldPassword, res.locals.user.password)
-      .then((result) => {
-        if (result) {
-          const password = bcrypt.hashSync(newPassword, 10);
-          User.findByIdAndUpdate(res.locals.user._id, { password })
-            .then(() => {
-              return renderFeedbackMessage(
-                res,
-                "./user/edit-profile",
-                "Edit Profile",
-                ["Password Updated Succesfully!"],
-                res.locals.user,
-                "success"
-              );
-            })
-            .catch((err) => next(err));
+    if (username === res.locals.user.username) {
+      feedbackMessages.push("Try changing your username.");
+    } else if (username) {
+      await User.findByIdAndUpdate(res.locals.user._id, { username });
+    }
+    
+    if ((!oldPassword && newPassword) || (oldPassword && !newPassword)) {
+      feedbackMessages.push("Make sure the password fields are filled");
+    }else if ((oldPassword && newPassword) && (oldPassword == newPassword)) {
+      feedbackMessages.push("Try changing your password now.");
+    } else if (oldPassword && newPassword) {
+        const validPassword = await bcrypt.compare(oldPassword, res.locals.user.password);
+        if (validPassword) {
+          await User.findByIdAndUpdate(res.locals.user._id, {password: await bcrypt.hash(newPassword, 10)})
         } else {
-          return renderFeedbackMessage(
-            res,
-            "./user/edit-profile",
-            "Edit Profile",
-            ["Passwords do not match!"],
-            res.locals.user,
-            "danger"
-          );
+          feedbackMessages.push("Invalid old password");
         }
-      })
-      .catch((err) => next(err));
+    }
+
+    if (feedbackMessages.length > 0) {
+      console.log("here: ", feedbackMessages);
+      return renderFeedbackMessage(
+        res,
+        "./user/edit-profile",
+        "Edit Profile",
+        feedbackMessages,
+        res.locals.user,
+        "danger"
+      );
+    } else {
+      res.redirect(req.originalUrl);
+    }
+  } catch (error) {
+    res.statusCode = 400;
+    error.message = "We couldn't process your updates."
+    next(error);
   }
 };
 
