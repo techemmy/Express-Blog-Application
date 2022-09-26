@@ -17,6 +17,12 @@ router.post(
   body("password")
     .trim().isLength({ min: 5 })
     .withMessage("Password should be at least a 5 characters"),
+  body("confirmPassword").custom((value, {req}) => {
+    if (value !== req.body.password) {
+      throw new Error("Passwords don't match.")
+    }
+    return true;
+  }),
   authController.user_create_post
 );
 
