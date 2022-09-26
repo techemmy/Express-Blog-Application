@@ -32,7 +32,7 @@ const user_profile_get = async (req, res, next) => {
       });
     }
   } catch (error) {
-    res.statusCode = 400;
+    res.statusCode = 404;
     error.message = "Invalid user!";
     next(error);
   }
@@ -56,18 +56,23 @@ const edit_profile_post = async (req, res, next) => {
     } else if (username) {
       await User.findByIdAndUpdate(res.locals.user._id, { username });
     }
-    
+
     if ((!oldPassword && newPassword) || (oldPassword && !newPassword)) {
       feedbackMessages.push("Make sure the password fields are filled");
-    }else if ((oldPassword && newPassword) && (oldPassword == newPassword)) {
+    } else if (oldPassword && newPassword && oldPassword == newPassword) {
       feedbackMessages.push("Try changing your password now.");
     } else if (oldPassword && newPassword) {
-        const validPassword = await bcrypt.compare(oldPassword, res.locals.user.password);
-        if (validPassword) {
-          await User.findByIdAndUpdate(res.locals.user._id, {password: await bcrypt.hash(newPassword, 10)})
-        } else {
-          feedbackMessages.push("Invalid old password");
-        }
+      const validPassword = await bcrypt.compare(
+        oldPassword,
+        res.locals.user.password
+      );
+      if (validPassword) {
+        await User.findByIdAndUpdate(res.locals.user._id, {
+          password: await bcrypt.hash(newPassword, 10),
+        });
+      } else {
+        feedbackMessages.push("Invalid old password");
+      }
     }
 
     if (feedbackMessages.length > 0) {
@@ -85,46 +90,52 @@ const edit_profile_post = async (req, res, next) => {
     }
   } catch (error) {
     res.statusCode = 400;
-    error.message = "We couldn't process your updates."
+    error.message = "We couldn't process your updates.";
     next(error);
   }
 };
 
-const user_comments_get = (req, res, next) => {
-  Comment.find({ user: res.locals.user._id })
-    .populate("user")
-    .populate("blog")
-    .then((comments) => {
-      res.render("comment", { title: "My comments", comments });
-    })
-    .catch((err) => next(err));
+const user_comments_get = async (req, res, next) => {
+  try {
+    comments = await Comment.find({ user: res.locals.user._id })
+      .populate("user")
+      .populate("blog");
+    res.render("comment", { title: "My comments", comments });
+  } catch (error) {
+    res.statusCode = 400;
+    error.message = "We couldn't retrieve your comments.";
+    next(error);
+  }
 };
 
-const upload_profile_image_post = (req, res, next) => {
-  if (!req.file) {
-    const isCurrentUser = req.params.id == res.locals.user.id;
-    return renderFeedbackMessage(
-      res,
-      "./user/profile",
-      "Profile Details",
-      ["Choose a file."],
-      res.locals.user,
-      "danger",
-      {
-        isCurrentUser,
-        currentUser: res.locals.user,
-        profileImagePath,
-      }
-    );
-  }
+const upload_profile_image_post = async (req, res, next) => {
+  try {
+    if (!req.file) {
+      const isCurrentUser = req.params.id == res.locals.user.id;
+      return renderFeedbackMessage(
+        res,
+        "./user/profile",
+        "Profile Details",
+        ["Choose a valid file."],
+        res.locals.user,
+        "danger",
+        {
+          isCurrentUser,
+          currentUser: res.locals.user,
+          profileImagePath,
+        }
+      );
+    }
 
-  User.findByIdAndUpdate(res.locals.user._id, {
-    profileImagePath: req.file.filename,
-  })
-    .then(() => {
-      res.redirect(`/user/${res.locals.user._id}`);
-    })
-    .catch((err) => next(err));
+    await User.findByIdAndUpdate(res.locals.user._id, {
+      profileImagePath: req.file.filename,
+    });
+    res.redirect(`/user/${res.locals.user._id}`);
+  } catch (error) {
+    res.statusCode = 400;
+    error.message = "Invalid file type. Only images (.jpg, .jpeg, .png) are allowed."
+    next(error);
+  }
 };
 
 module.exports = {

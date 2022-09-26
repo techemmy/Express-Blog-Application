@@ -62,7 +62,7 @@ const uploadProfileImage = multer({storage: profileImageStorage,
   fileFilter: function (req, file, callback) {
     if (!imageWhitelist.includes(file.mimetype)) {
       callback(null, false)
-      return callback(new Error('Only .png, .jpg and .jpeg format allowed!'));
+      // return callback(new Error('Only .png, .jpg and .jpeg format allowed!'));
     } else {
       callback(null, true)
     }
