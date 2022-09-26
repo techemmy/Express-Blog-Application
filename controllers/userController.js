@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const User = require("../models/user");
 const Comment = require("../models/comment");
-const { renderFeedbackMessage } = require("../helperFunctions");
+const { renderFeedbackMessage } = require("../utilities");
 const bcrypt = require("bcryptjs");
 
 // user_profile_get, edit_profile_get, edit_profile_post, user_comments, upload_profile_image_post

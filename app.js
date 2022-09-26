@@ -10,7 +10,7 @@ const blogRoutes = require("./routes/blogRoutes");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoute");
 const { verifyToken, checkUser } = require("./middleware/authMiddleware");
-const { unless } = require("./helperFunctions");
+const { unless } = require("./utilities");
 
 // express app
 const app = express();

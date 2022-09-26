@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
 const process = require('process');
 const multer = require('multer');
-const path = require('path');
 
 
 const TOKEN_KEY = process.env.TOKEN_KEY;

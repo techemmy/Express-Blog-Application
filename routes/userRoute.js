@@ -1,7 +1,7 @@
 const express = require("express");
 const userController = require("../controllers/userController");
 const { body } = require("express-validator");
-const { uploadProfileImage } = require("../helperFunctions");
+const { uploadProfileImage } = require("../utilities");
 
 const router = express.Router();
 

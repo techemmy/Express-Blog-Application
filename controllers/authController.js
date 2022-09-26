@@ -6,7 +6,7 @@ const {
   createToken,
   convertFormErrorObjToArr,
   maxAge
-} = require("../helperFunctions");
+} = require("../utilities");
 const { validationResult } = require("express-validator");
 
 // ROUTES HANDLER: register_get, user_create_post, login, user_login_post, user_logout_get
