@@ -3,7 +3,7 @@ This is an improvement from the [initial express app](https://github.com/techemm
 
 It is still in progress but these are the imminent changes
 - Convert project architecture to MVC  ✅
-- Transform synchronous operations to asynchronous operations
+- Transform synchronous operations to asynchronous operations ✅
 - Ensure efficient code operations
 - Proper error handling
 - Test the app functions
