@@ -5,7 +5,6 @@ It is still in progress but these are the imminent changes
 - Convert project architecture to MVC  ✅
 - Transform synchronous operations to asynchronous operations ✅
 - Ensure efficient code operations
-- Follow security best practices
 - Proper error handling
 - Test the app functions
 - Documenting the code
