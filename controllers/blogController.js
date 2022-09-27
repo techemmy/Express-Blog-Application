@@ -10,6 +10,8 @@ const blog_index = async (req, res, next) => {
     blogs = await Blog.find().populate("labels").sort({ createdAt: -1 });
     res.render("blogs/index", { title: "All Blogs", blogs });
   } catch (error) {
+    res.statusCode = 400;
+    error.message = "The blogs were not retrieved. Try again, later";
     next(error);
   }
 };
@@ -21,6 +23,8 @@ const blog_details = async (req, res, next) => {
     comments = await Comment.find({ blog: blog.id }).populate("user");
     res.render("blogs/details", { blog, title: "Blog Details", comments });
   } catch (error) {
+    res.statusCode = 400;
+    error.message = "Couldn't retrieve blog.";
     next(error);
   }
 };
@@ -34,6 +38,8 @@ const blog_create_get = async (req, res, next) => {
       labels: blogLabels,
     });
   } catch (error) {
+    res.statusCode = 400;
+    error.message = "An error occured while creating the blog";
     next(error);
   }
 };
@@ -64,6 +70,8 @@ const blog_create_post = async (req, res, next) => {
 
     res.redirect("/blogs");
   } catch (error) {
+    res.statusCode = 400;
+    error.message = "We cound't add your new blog.";
     next(error);
   }
 };
@@ -71,10 +79,11 @@ const blog_create_post = async (req, res, next) => {
 const blog_delete = async (req, res, next) => {
   try {
     const id = req.params.id;
-
     await Blog.findByIdAndDelete(id);
     res.json({ redirect: "/blogs" });
   } catch (error) {
+    res.statusCode = 400;
+    error.message = "We coudn't delete this message.";
     next(error);
   }
 };
@@ -93,6 +102,8 @@ const blog_add_comment = async (req, res, next) => {
     await blog.save();
     res.redirect(req.originalUrl);
   } catch (error) {
+    res.statusCode = 400;
+    error.message = "An error prevented the comment from saving.";
     next(error);
   }
 };
