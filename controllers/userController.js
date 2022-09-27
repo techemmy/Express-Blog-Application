@@ -1,4 +1,3 @@
-const mongoose = require("mongoose");
 const User = require("../models/user");
 const Comment = require("../models/comment");
 const { renderFeedbackMessage } = require("../utilities");
@@ -38,7 +37,7 @@ const user_profile_get = async (req, res, next) => {
   }
 };
 
-const edit_profile_get = (req, res) => {
+const edit_profile_get = async (req, res) => {
   res.render("./user/edit-profile", { title: "Edit Profile" });
 };
 
