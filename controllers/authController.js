@@ -20,6 +20,7 @@ const user_create_post = async (req, res, next) => {
     // handles form validation error
     if (!errors.isEmpty()) {
       const errorsList = convertFormErrorObjToArr(errors.array());
+      res.statusCode = 400;
       return renderFeedbackMessage(
         res,
         "./auth/register",
@@ -33,6 +34,7 @@ const user_create_post = async (req, res, next) => {
     const { username, email, password } = req.body;
 
     if (await User.findOne({ email })) {
+      res.statusCode = 400;
       return renderFeedbackMessage(
         res,
         "./auth/register",
@@ -56,7 +58,7 @@ const user_create_post = async (req, res, next) => {
       httpOnly: true,
       maxAge: maxAge * 1000,
     });
-    return res.redirect("/");
+    return res.redirect("/blogs");
   } catch (error) {
     res.statusCode = 400;
     error.message = "We couldn't authenticate your details.";
@@ -113,7 +115,7 @@ const user_login_post = async (req, res, next) => {
     token = createToken(userFound._id, userFound.email);
     // save user authentication token
     res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
-  
+
     res.redirect("/");
   } catch (error) {
     res.statusCode = 400;
