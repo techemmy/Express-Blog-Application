@@ -4,6 +4,7 @@ require("dotenv").config();
 const process = require("process");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
+const bodyParser = require("body-parser")
 
 // local imports
 const blogRoutes = require("./routes/blogRoutes");
@@ -15,16 +16,13 @@ const { unless } = require("./utilities");
 // express app
 const app = express();
 
-// configure app port
-const { API_PORT } = process.env;
-const PORT = process.env.PORT || API_PORT;
-
 // register view engine
 app.set("view engine", "ejs");
 
 // middleware & static files
 app.use(express.static("public"));
-app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(morgan("dev"));
 app.use(cookieParser());
 
@@ -64,16 +62,4 @@ app.use((req, res) => {
   res.status(404).render("404", { title: "404", message: null });
 });
 
-// connect to mongodb
-const dbURI = process.env.dbURI;
-mongoose.connect(dbURI, (error) => {
-  if (!error) {
-    console.log("db connected successfully!");
-  } else {
-    console.log("An error occured: ", error);
-  }
-})
-
-app.listen(PORT, () => {
-  console.log("server started successfully!")
-});
+module.exports = app;
