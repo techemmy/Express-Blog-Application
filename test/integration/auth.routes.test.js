@@ -30,8 +30,8 @@ describe("Authentication Register", () => {
 
     it("should fail to POST /auth/register due to short username", async () => {
         const userAuthData = {
-            username: "testuser",
-            email: "test?",
+            username: "test",
+            email: "test@gmail.com",
             password: "testuser",
             confirmPassword: "testuser"
         }
