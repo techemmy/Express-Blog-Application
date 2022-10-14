@@ -78,6 +78,7 @@ const user_login_post = async (req, res, next) => {
     const errors = validationResult(req);
     const errorsList = convertFormErrorObjToArr(errors.array());
     if (!errors.isEmpty()) {
+      res.statusCode = 400;
       return renderFeedbackMessage(
         res,
         "./auth/login",
@@ -90,6 +91,7 @@ const user_login_post = async (req, res, next) => {
 
     const userFound = await User.findOne({ email });
     if (!userFound) {
+      res.statusCode = 400;
       return renderFeedbackMessage(
         res,
         "./auth/login",
@@ -102,6 +104,7 @@ const user_login_post = async (req, res, next) => {
 
     const validPassword = await bcrypt.compare(password, userFound.password);
     if (!validPassword) {
+      res.statusCode = 401;
       return renderFeedbackMessage(
         res,
         "./auth/login",
