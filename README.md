@@ -1,5 +1,5 @@
 # Express-Blog-Application
-https://github.com/techemmy/Express-Blog-Application/actions/workflows/ci.yaml/badge.svg
+![Tests workflow Status](https://github.com/techemmy/Express-Blog-Application/actions/workflows/ci.yaml/badge.svg)
 
 This is an improvement from the [initial express app](https://github.com/techemmy/Blog-Web-Application) I built.
 
