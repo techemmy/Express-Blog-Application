@@ -71,7 +71,6 @@ const blog_create_post = async (req, res, next) => {
     res.redirect("/blogs");
   } catch (error) {
     res.statusCode = 400;
-    error.message = "We cound't add your new blog.";
     next(error);
   }
 };
