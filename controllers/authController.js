@@ -20,7 +20,7 @@ const user_create_post = async (req, res, next) => {
     // handles form validation error
     if (!errors.isEmpty()) {
       const errorsList = convertFormErrorObjToArr(errors.array());
-      res.statusCode = 400;
+      res.statusCode = 403;
       return renderFeedbackMessage(
         res,
         "./auth/register",
@@ -34,7 +34,7 @@ const user_create_post = async (req, res, next) => {
     const { username, email, password } = req.body;
 
     if (await User.findOne({ email })) {
-      res.statusCode = 400;
+      res.statusCode = 403;
       return renderFeedbackMessage(
         res,
         "./auth/register",
@@ -78,7 +78,7 @@ const user_login_post = async (req, res, next) => {
     const errors = validationResult(req);
     const errorsList = convertFormErrorObjToArr(errors.array());
     if (!errors.isEmpty()) {
-      res.statusCode = 400;
+      res.statusCode = 403;
       return renderFeedbackMessage(
         res,
         "./auth/login",
@@ -91,7 +91,7 @@ const user_login_post = async (req, res, next) => {
 
     const userFound = await User.findOne({ email });
     if (!userFound) {
-      res.statusCode = 400;
+      res.statusCode = 403;
       return renderFeedbackMessage(
         res,
         "./auth/login",
@@ -104,7 +104,7 @@ const user_login_post = async (req, res, next) => {
 
     const validPassword = await bcrypt.compare(password, userFound.password);
     if (!validPassword) {
-      res.statusCode = 401;
+      res.statusCode = 403;
       return renderFeedbackMessage(
         res,
         "./auth/login",
