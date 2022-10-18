@@ -5,7 +5,7 @@ const blogLabelSchema = new Schema({
     'title': {
         type: String,
         required: true,
-        unique: true
+        unique: [true, "Label title is required"]
     },
     'color': {
         type: String,

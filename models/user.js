@@ -9,11 +9,11 @@ const UserSchema = new Schema({
   },
   email: {
     type: String,
-    unique: true,
+    unique: [true, "This email is being used by another user"],
   },
   password: {
     type: String,
-    required: true,
+    required: [true, "Password field is required!"],
   },
   profileImagePath : {
     type: String,

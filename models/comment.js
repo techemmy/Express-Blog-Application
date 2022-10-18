@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const CommentSchema = new Schema({
     'comment': {
         type: String,
-        required: true
+        required: [true, "No comment was detected!"]
     },
     'blog': {
         type: mongoose.Schema.Types.ObjectId,
