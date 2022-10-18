@@ -76,6 +76,7 @@ const edit_profile_post = async (req, res, next) => {
 
     if (feedbackMessages.length > 0) {
       console.log("here: ", feedbackMessages);
+      res.statusCode = 403;
       return renderFeedbackMessage(
         res,
         "./user/edit-profile",
