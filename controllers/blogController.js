@@ -3,7 +3,7 @@ const BlogLabel = require("../models/blogLabel");
 const Comment = require("../models/comment");
 const User = require("../models/user");
 const { validationResult } = require("express-validator");
-// blog_index, blog_details, blog_create_get, blog_create_post, blog_delete
+// blog_index, blog_details, blog_create_get, blog_create_post, blog_delete, blog_add_comment
 
 const blog_index = async (req, res, next) => {
   try {
@@ -11,7 +11,7 @@ const blog_index = async (req, res, next) => {
     res.render("blogs/index", { title: "All Blogs", blogs });
   } catch (error) {
     res.statusCode = 400;
-    error.message = "The blogs were not retrieved. Try again, later";
+    error.message = "The blogs could not be retrieved. Try again, later";
     next(error);
   }
 };
