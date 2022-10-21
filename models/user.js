@@ -39,6 +39,14 @@ UserSchema.pre("save", async function (next) {
   next();
 });
 
+UserSchema.post("save", (error, res, next) => {
+  if (error.name === 'MongoServerError' && error.code === 11000) {
+    next(new Error('This user already exists'));
+  } else {
+    next();
+  }
+})
+
 const User = mongoose.model("User", UserSchema);
 
 module.exports = User;
