@@ -84,15 +84,15 @@ describe("Authentication Login", () => {
         expect(response.headers['content-type']).toContain("text/html")
     })
 
-    it("should fail to POST /auth/login due to unexisting user", async () => {
-        const response = await supertest(app).post("/auth/login").send(usersForLogin.withUnexistingUser);
-        expect(response.statusCode).toBe(403);
-        expect(response.headers['content-type']).toContain("text/html")
-    })
-
     it("should POST /auth/login successfully ", async () => {
         const response = await supertest(app).post("/auth/login").send(usersForLogin.withValidUser);
         expect(response.statusCode).toBe(302);
         expect(response.headers['content-type']).toContain("text/plain")
+    })
+
+    it("should fail to POST /auth/login due to unexisting user", async () => {
+        const response = await supertest(app).post("/auth/login").send(usersForLogin.withUnexistingUser);
+        expect(response.statusCode).toBe(403);
+        expect(response.headers['content-type']).toContain("text/html")
     })
 })
