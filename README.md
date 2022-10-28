@@ -11,7 +11,11 @@ It is still in progress but these are the imminent changes
 - Test the app functions ✅
 - Documenting the code: in progress 🚧
 
-
-To start the app, make sure the database URL is set in a .env file and run
-
-`npm run start`
+## Running the ap
+- Run `npm install` to install all the requirements in the package.json file
+- Add the corresponding values for the following to a .env file
+    - API_PORT
+    - dbURI
+    - TOKEN_KEY
+    - testdbURI
+- Then run `npm run start`
