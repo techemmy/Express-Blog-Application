@@ -49,10 +49,8 @@ const usersForLogin = {
         password: "testnouser",
     },
     withValidUser: {
-        username: "testuser",
         email: "testuser@test.com",
         password: "testuser",
-        confirmPassword: "testuser"
     }
 }
 
