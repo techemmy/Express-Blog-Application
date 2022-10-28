@@ -60,8 +60,7 @@ const user_create_post = async (req, res, next) => {
     });
     return res.redirect("/blogs");
   } catch (error) {
-    res.statusCode = 400;
-    error.message = "We couldn't authenticate your details.";
+    res.statusCode = 403;
     next(error);
   }
 };

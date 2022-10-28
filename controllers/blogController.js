@@ -31,7 +31,6 @@ const blog_details = async (req, res, next) => {
 
 const blog_create_get = async (req, res, next) => {
   try {
-    errors = validationResult(req);
     blogLabels = await BlogLabel.find();
     res.render("blogs/create", {
       title: "Create a new blog",
