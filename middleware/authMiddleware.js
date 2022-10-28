@@ -3,6 +3,7 @@ const User = require("../models/user");
 
 const TOKEN_KEY = process.env.TOKEN_KEY;
 
+// it checks if user is authenticated on every request
 const verifyToken = async (req, res, next) => {
 
   try {
@@ -20,6 +21,7 @@ const verifyToken = async (req, res, next) => {
 
 };
 
+// checks if user is authenticated and adds user to the request object
 const checkUser = async (req, res, next) => {
   try {
     const token = req.cookies.jwt;
@@ -30,7 +32,7 @@ const checkUser = async (req, res, next) => {
       res.locals.user = user;
     } else {
       res.locals.user = null;
-    } 
+    }
     next()
   } catch (error) {
       res.locals.user = null;
